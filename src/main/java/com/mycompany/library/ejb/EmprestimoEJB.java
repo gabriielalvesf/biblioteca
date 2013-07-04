@@ -10,9 +10,12 @@ import com.mycompany.library.model.Usuario;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -54,11 +57,33 @@ public class EmprestimoEJB {
         return em.createQuery("select e from Emprestimo e where e.devolvido = 1").getResultList();
     }
     
+    public List<Emprestimo> todosEmprestimosAlunos() {
+        Query query = em.createQuery("select e from Emprestimo e where e.usuario.permissao = 'user' and e.usuario.login = :login and e.devolvido = 0");
+        query.setParameter("login", getUsuarioLogado().getLogin());
+        return query.getResultList();
+    }
+    
+    public List<Emprestimo> todosDevolucoesAlunos() {
+        Query query = em.createQuery("select e from Emprestimo e where e.usuario.permissao = 'user' and e.usuario.login = :login and e.devolvido = 1");
+        query.setParameter("login", getUsuarioLogado().getLogin());
+        return query.getResultList();
+    }
+    
+    
+    
     public void devolver(Emprestimo e) {
         Emprestimo emp = em.find(Emprestimo.class, e.getId());
         emp.setDevolvido(true);
         emp.setDataDevolucao(new Date());
         em.merge(emp);
+    }
+    
+    public Usuario getUsuarioLogado() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        HttpSession session = (HttpSession) ec.getSession(false);
+        Usuario user = (Usuario) session.getAttribute("usuario");
+        return user;
     }
     
 }

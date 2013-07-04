@@ -9,7 +9,7 @@
 
         <h:form id="formEmprestimosCadastrados" style="margin-top: 10px; font-size: 14px">
             <p:fieldset legend="Devolucoes">
-                <p:dataTable id="emprestimosCadastrados" var="emprestimo" value="#{emprestimoBean.todosDevolvidos()}"  
+                <p:dataTable id="emprestimosCadastrados" var="emprestimo" value="#{emprestimoBean.todosDevolucoesAlunos()}"  
                              paginator="true" rows="10"  
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                              rowsPerPageTemplate="5,10,15"

@@ -1,4 +1,4 @@
-/*package com.mycompany.library.filter;
+package com.mycompany.library.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -40,4 +40,4 @@ public class ControleDeAcesso implements Filter {
         
     }
     
-}*/
+}

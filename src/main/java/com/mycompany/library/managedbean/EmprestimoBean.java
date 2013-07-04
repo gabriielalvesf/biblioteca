@@ -14,7 +14,10 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -23,7 +26,7 @@ import javax.faces.context.FacesContext;
 @ManagedBean
 @SessionScoped
 public class EmprestimoBean {
-    
+
     private Long idSelecionado;
     private String login;
     private Usuario usuario = new Usuario();
@@ -33,57 +36,63 @@ public class EmprestimoBean {
     
     @EJB
     EmprestimoEJB emprestimoEJB;
-    
+
     public void salvar() {
         emprestimo.setUsuario(buscarUsuario());
         emprestimo.setLivros(livros);
         emprestimoEJB.salvar(emprestimo);
-        
+
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                 FacesMessage.SEVERITY_INFO, "Emprestimo realizado com sucesso!", null));
-        
+
         this.usuario = new Usuario();
+        livros = new ArrayList<Livro>();
     }
-    
+
     public Usuario buscarUsuario() {
         return emprestimoEJB.buscarUsuario(login);
     }
-    
+
     public void addLivro() {
         Livro l = emprestimoEJB.buscarLivro(idSelecionado);
         livros.add(l);
         showList();
     }
-    
+
     public void showList() {
-        for(int i = 0; i < livros.size(); i++) {
+        for (int i = 0; i < livros.size(); i++) {
             System.out.println("Nome do livro: " + livros.get(i).getNome());
         }
     }
-    
+
     public List<Emprestimo> todosEmprestados() {
         return emprestimoEJB.todosEmprestados();
     }
-    
+
     public List<Emprestimo> todosDevolvidos() {
         return emprestimoEJB.todosDevolvidos();
     }
     
+    public List<Emprestimo> todosEmprestimosAlunos() {
+        return emprestimoEJB.todosEmprestimosAlunos();
+    }
+    
+    public List<Emprestimo> todosDevolucoesAlunos() {
+        return emprestimoEJB.todosDevolucoesAlunos();
+    }
+
     public void devolver() {
         emprestimoEJB.devolver(emprestimoSelecionado);
-        
+
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                 FacesMessage.SEVERITY_INFO, "Devolução realizada com sucesso!", null));
     }
 
-    
-    
-    
-    /*****************************
-     * 
-     * 
+    /**
+     * ***************************
+     *
+     *
      */
-
     public Long getIdSelecionado() {
         return idSelecionado;
     }
@@ -115,5 +124,4 @@ public class EmprestimoBean {
     public void setEmprestimoSelecionado(Emprestimo emprestimoSelecionado) {
         this.emprestimoSelecionado = emprestimoSelecionado;
     }
-    
 }
