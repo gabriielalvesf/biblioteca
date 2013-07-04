@@ -1,0 +1,75 @@
+<ui:composition template="template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="conteudo">
+
+        <h:form id="formEmprestimosCadastrados" style="margin-top: 10px; font-size: 14px">
+            <p:fieldset legend="Devolucoes">
+                <p:dataTable id="emprestimosCadastrados" var="emprestimo" value="#{emprestimoBean.todosDevolvidos()}"  
+                             paginator="true" rows="10"  
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             emptyMessage="Nenhuma devolucao realizada">
+
+                    <f:facet name="header">
+                        Lista de Devolucoes Realizadas
+                    </f:facet>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Nome do aluno"/>
+                        </f:facet>
+                        #{emprestimo.usuario.nome}
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Login do aluno"/>
+                        </f:facet>
+                        #{emprestimo.usuario.login}
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Livro(s)"/>
+                        </f:facet>
+                        <ui:repeat value="#{emprestimo.livros}" var="livro">
+                            <h:outputText value="#{livro.nome} - #{livro.autor}"/><br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Data de emprestimo"/>
+                        </f:facet>
+                        <h:outputText value="#{emprestimo.dataEmprestimo}">
+                            <f:convertDateTime dateStyle="medium"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Data de devolucao"/>
+                        </f:facet>
+                        <h:outputText value="#{emprestimo.dataDevolucao}">
+                            <f:convertDateTime dateStyle="medium"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Devolvido"/>
+                        </f:facet>
+                        <h:outputText value="#{emprestimo.devolvido == false ? 'Nao' : 'Sim'}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

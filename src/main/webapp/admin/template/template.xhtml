@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>BibliotecaWeb</title>
+    </h:head>
+    <h:body>
+        <div id="topo">
+            <p:menubar>
+                <p:menuitem value="Livros" url="livros.xhtml"/>
+                <p:menuitem value="Usuários" url="usuarios.xhtml"/>
+                <p:menuitem value="Empréstimos" url="emprestimos.xhtml"/>
+                <p:menuitem value="Devoluções" url="devolucoes.xhtml"/>
+            </p:menubar>
+        </div>
+        
+        <ui:insert name="conteudo">Conteudo</ui:insert>
+        
+        <div id="rodape" style="text-align: center">
+            <h3>BibliotecaWeb - 2013</h3>
+        </div>
+        
+    </h:body>
+</html>

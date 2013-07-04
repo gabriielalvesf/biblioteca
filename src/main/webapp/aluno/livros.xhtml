@@ -1,0 +1,46 @@
+<ui:composition template="template/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="conteudo">
+
+        <h:form id="livros" style="margin-top: 10px;">
+            <p:dataTable id="dataTable" var="livro" value="#{livroBean.todos()}"  
+                         paginator="true" rows="10"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="5,10,15"
+                         emptyMessage="Nenhum livro cadastrado">
+
+                <f:facet name="header">
+                    Lista de Livros Cadastrados
+                </f:facet>
+
+                <p:column style="text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="Nome"/>
+                    </f:facet>
+                    #{livro.nome}
+                </p:column>
+
+                <p:column style="text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="ISBN"/>
+                    </f:facet>
+                    #{livro.isbn}
+                </p:column>
+
+                <p:column style="text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="Autor"/>
+                    </f:facet>
+                    #{livro.autor}
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

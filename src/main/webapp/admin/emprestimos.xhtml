@@ -1,0 +1,118 @@
+<ui:composition template="template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="conteudo">
+
+        <h:form id="formCadastroEmprestimos" style="margin-top: 10px;">
+            <p:growl id="mensagens"/>
+            <p:fieldset legend="Realizar Emprestimos">
+                <p:panelGrid columns="5" style="width: 100%;">
+                    <h:outputLabel value="Digite o login do aluno: "/>
+                    <p:inputText value="#{emprestimoBean.login}" />
+
+                    <h:outputLabel value="Selecione o livro: "/>
+                    <p:selectOneMenu value="#{emprestimoBean.idSelecionado}">
+                        <f:selectItem itemLabel="Selecione um livro" noSelectionOption="true"/>
+                        <f:selectItems value="#{livroBean.todos()}" 
+                                       var="livro"
+                                       itemLabel="#{livro.nome} - #{livro.autor}"
+                                       itemValue="#{livro.id}"/>
+                    </p:selectOneMenu>
+                    <p:commandButton value="Adicionar Livro" actionListener="#{emprestimoBean.addLivro()}"/>
+
+                    <h:outputText value="Data de emprestimo: "/>
+                    <p:calendar value="#{emprestimoBean.emprestimo.dataEmprestimo}" id="emprestimo"/>
+
+                    <h:outputText value="Data estimada de devolucao: "/>
+                    <p:calendar value="#{emprestimoBean.emprestimo.dataEstimadaDevolucao}" id="devolucao"/>
+
+                </p:panelGrid>
+
+                <p:commandButton value="Salvar" icon="ui-icon-check" 
+                                 actionListener="#{emprestimoBean.salvar()}"
+                                 update=":formCadastroEmprestimos,
+                                 :formEmprestimosCadastrados:emprestimosCadastrados"/>
+
+            </p:fieldset>
+        </h:form>
+
+        <h:form id="formEmprestimosCadastrados" style="margin-top: 10px; font-size: 14px">
+            <p:fieldset legend="Emprestimos Realizados">
+                <p:dataTable id="emprestimosCadastrados" var="emprestimo" value="#{emprestimoBean.todosEmprestados()}"  
+                             paginator="true" rows="10"  
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             emptyMessage="Nenhum emprestimo realizado">
+
+                    <f:facet name="header">
+                        Lista de Emprestimos Realizados
+                    </f:facet>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Nome do aluno"/>
+                        </f:facet>
+                        #{emprestimo.usuario.nome}
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Login do aluno"/>
+                        </f:facet>
+                        #{emprestimo.usuario.login}
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Livro(s)"/>
+                        </f:facet>
+                        <ui:repeat value="#{emprestimo.livros}" var="livro">
+                            <h:outputText value="#{livro.nome} - #{livro.autor}"/><br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Data de emprestimo"/>
+                        </f:facet>
+                        <h:outputText value="#{emprestimo.dataEmprestimo}">
+                            <f:convertDateTime dateStyle="medium"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Data estimada de devolucao"/>
+                        </f:facet>
+                        <h:outputText value="#{emprestimo.dataEstimadaDevolucao}">
+                            <f:convertDateTime dateStyle="medium"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Devolvido"/>
+                        </f:facet>
+                        <h:outputText value="#{emprestimo.devolvido == false ? 'Nao' : 'Sim'}"/>
+                    </p:column>
+                    
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Realizar Devolucao"/>
+                        </f:facet>
+                        <p:commandButton value="Ok" action="#{emprestimoBean.devolver()}" update=":formEmprestimosCadastrados">
+                            <f:setPropertyActionListener target="#{emprestimoBean.emprestimoSelecionado}" 
+                                                         value="#{emprestimo}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

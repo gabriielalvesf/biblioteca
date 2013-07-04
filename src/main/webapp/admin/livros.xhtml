@@ -1,0 +1,97 @@
+<ui:composition template="template/template.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="conteudo">
+
+        <h:form id="formCadastroLivros" style="margin-top: 10px;">
+            <p:growl id="mensagens"/>
+            <p:fieldset legend="Cadastro de Livros">
+                <h:inputHidden value="#"/>
+                <p:panelGrid columns="4" style="width: 100%;">
+                    <h:outputLabel value="Nome: "/>
+                    <p:inputText value="#{livroBean.livro.nome}" 
+                                 required="true" requiredMessage="Campo nome e obrigatorio!" />
+
+                    <h:outputLabel value="ISBN: "/>
+                    <p:inputText value="#{livroBean.livro.isbn}" 
+                                 required="true" requiredMessage="Campo isbn e obrigatorio!"
+                                 maxlength="13"/>
+
+                    <h:outputLabel value="Autor: "/>
+                    <p:inputText value="#{livroBean.livro.autor}" 
+                                 required="true" requiredMessage="Campo autor e obrigatorio!" />
+
+
+                </p:panelGrid>
+
+                <p:commandButton value="Salvar" icon="ui-icon-check"
+                                 actionListener="#{livroBean.salvar()}" 
+                                 update=":formCadastroLivros,
+                                         :formLivrosCadastrados:livrosCadastrados"/>
+
+            </p:fieldset>
+        </h:form>
+
+        <h:form id="formLivrosCadastrados" style="margin-top: 10px;">
+            <p:fieldset legend="Livros Cadstrados">
+                <p:dataTable id="livrosCadastrados" var="livro" value="#{livroBean.todos()}"  
+                             paginator="true" rows="10"  
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             emptyMessage="Nenhum livro cadastrado">
+
+                    <f:facet name="header">
+                        Lista de Livros Cadastrados
+                    </f:facet>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Nome"/>
+                        </f:facet>
+                        #{livro.nome}
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="ISBN"/>
+                        </f:facet>
+                        #{livro.isbn}
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="Autor"/>
+                        </f:facet>
+                        #{livro.autor}
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Editar" />
+                        </f:facet>
+                        <p:commandButton icon="ui-icon-document"
+                                         actionListener="#{livroBean.editar(livro)}"
+                                         update=":formLivrosCadastrados"
+                                         ajax="false"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Excluir" />
+                        </f:facet>
+                        <p:commandButton icon="ui-icon-trash"
+                                         actionListener="#{livroBean.excluir(livro.id)}"
+                                         update=":formLivrosCadastrados, 
+                                         :formCadastroLivros:mensagens"/>
+                    </p:column>
+
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
